@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.min.js"
+      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+      crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+	  integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+	    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+	    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+	    crossorigin="anonymous"></script>
+
+    <link href="https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.12.2/paper-full.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.2/dist/FileSaver.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/js-combinatorics@0.5.4/combinatorics.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dexie/2.0.4/dexie.min.js"></script>
+
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/http-vue-loader"></script>    
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>    
+
+    <title>Configuratore Cementine</title>
+    <style>
+
+      
+    </style>
+    <link href="marti.css" rel="stylesheet">
+  </head>
+  <body>
+    <div id="app">
+      <div id="topbar">
+	<nav class="navbar navbar-expand navbar-dark bg-dark">
+	  <a class="navbar-brand" href="#"><img height="24" src="logo.svg"></a>
+	  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+	    <ul class="nav navbar-nav mr-auto">
+	      <li class="nav-item dropdown">
+		<a class="nav-link dropdown-toggle" href="#">file</a>
+		<ul class="dropdown-menu">
+		  <li><a class="dropdown-item" href="#">load</a></li>
+		  <li><a class="dropdown-item" href="#">save</a></li>
+		  <li><a class="dropdown-item" href="#">save as SVG</a></li>
+		  <li><a class="dropdown-item" href="#">save as PNG</a></li>
+		  <li><a class="dropdown-item" href="#">save as JSON</a></li>
+		</ul>
+	      </li>
+	      <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#">vista</a>
+		<ul class="dropdown-menu">
+		  <li><a class="dropdown-item" href="#">decori</a></li>
+		  <li><a class="dropdown-item" href="#">variazioni</a></li>
+		  <li><a class="dropdown-item" href="#">pavimento</a></li>
+		</ul>
+	      </li>
+	      <!-- <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#">routes</a> -->
+	      <!-- 	<ul class="dropdown-menu"> -->
+	      <!-- 	</ul> -->
+	      <!-- </li> -->
+	      <li class="nav-item"><a class="nav-link" href="#">aiuto</a></li>
+	    </ul>
+	  </div>
+	</nav>
+      </div>
+      <div id="bottombar">
+	<div class="swatches" id="swatchesDecoration">
+	  Colore sfondo:
+	  <div v-on:click="toggleColor(color, true, 'decoration')" 
+	       v-bind:style="{ 'background-color': mainColor }"
+	       class="swatch swatch-horizontal">&nbsp;</div>
+	</div>
+	<div class="swatches" id="swatchesDecoration">
+	  Colori decorazione:
+	  <div v-on:click="toggleColor(color, true, 'decoration')" v-for="color in decorationColors"
+	       v-bind:style="{ 'background-color': color }"
+	       class="swatch swatch-horizontal">&nbsp;</div>
+	</div>
+	<div class="swatches" id="swatchesTiles">
+	  Stampo:
+	  <div class="swatch swatch-horizontal">
+	    <img class="tile" v-bind:src="'stampi/' + (stampo || 'none.svg')">
+	  </div>
+	</div>
+	<div class="swatches" v-on:click="makeVars()">Genera variazioni</div>
+	<div class="swatches">{{ variantCount }}</div>
+	<div class="swatches">{{ areaCount }}</div>
+      </div>
+
+      <div id="leftbar">
+	<i class="fa fa-lg fa-paint-brush" aria-hidden="true"></i>
+	<i class="fa fa-lg fa-pencil" aria-hidden="true"></i>
+	<i class="fa fa-lg fa-eraser" aria-hidden="true"></i>
+	<i class="spacer" aria-hidden="true">&nbsp;</i>
+	<i class="fa fa-lg fa-clone" aria-hidden="true"></i>
+	<i class="fa fa-lg fa-clipboard" aria-hidden="true"></i>
+	<i class="spacer" aria-hidden="true">&nbsp;</i>
+	<i class="fa fa-lg fa-undo" aria-hidden="true"></i>
+	<i class="fa fa-lg fa-repeat" aria-hidden="true"></i>
+	<i class="spacer" aria-hidden="true">&nbsp;</i>
+	<i class="fa fa-lg fa-tint" aria-hidden="true"></i>
+	<i class="spacer" aria-hidden="true">&nbsp;</i>
+	<i class="fa fa-lg fa-magic " aria-hidden="true"></i>
+	<i class="fa fa-lg fa-circle-thin " aria-hidden="true"></i>
+	<i class="fa fa-lg fa-square-o" aria-hidden="true"></i>
+	<i class="spacer" aria-hidden="true">&nbsp;</i>
+	<i class="fa fa-lg fa-cog" aria-hidden="true"></i>
+      </div>
+      <div id="workarea">
+	<canvas style="display:none"  width="100%" height="100%" id="canvas"></canvas>
+	<img v-on:click="toggleTile(stampo)" v-for="stampo in stampi" class="tile choose" v-bind:src="'stampi/' + stampo">
+      </div>    
+      <div id="rightbar">
+	<div>Colore sfondo</div>
+	<div class="swatches" id="swatchesMain">
+	  <div v-on:click="toggleColor(color, false, 'main')" v-for="color in colors" v-bind:style="{ 'background-color': color }" class="swatch">&nbsp;</div>
+	</div>
+	<div>Colori decorazione</div>
+	<div class="swatches" id="swatchesDecoration">
+	  <div v-on:click="toggleColor(color, true, 'decoration')" v-for="color in colors" v-bind:style="{ 'background-color': color }" class="swatch">&nbsp;</div>
+	</div>
+      </div>
+    </div>
+  </body>
+  <script src="app.js" type="module"></script>
+</html>
+

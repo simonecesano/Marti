@@ -1,0 +1,79 @@
+#app {
+    display: grid;
+    height: 100vh;
+    margin: 0; padding: 0;
+    border: none;
+    grid-template-columns: 48px 1fr 96px;
+    grid-template-rows: 56px 1fr 60px;
+}
+
+#statusbar * { font-size: 100% !important; }
+
+#topbar {
+    margin: 0; padding: 0;
+    grid-column: 1 / 4;
+    grid-row: 1;
+}
+#bottombar {
+    margin: 0; padding: 6; padding-left: 48;
+    grid-column: 1 / 4;
+    grid-row: 3;
+    background-color: #343A40;
+}
+
+#workarea {
+    grid-column: 2;
+    grid-row: 2;
+    background-color: grey;
+}
+
+#leftbar {
+    margin: 0; padding: 0;
+    padding-top: 12px;
+    grid-column: 1;
+    grid-row: 2;
+    background-color: #343A40;
+    color: white;
+}
+
+#rightbar {
+    margin: 0; padding: 0;
+    grid-column: 3;
+    grid-row: 2;
+    background-color: #343A40;
+}
+
+#leftbar i { width: 48px; height: 36px; text-align: center }
+#leftbar i.spacer { width: 48px; font-size:8; text-align: center }
+
+.swatches { column-count: 2; margin: 0; padding: 0; padding-right: 18; height: 240 }
+#settings { column-count: 1; margin: 0; padding: 0; padding-right: 18; height: 240 }
+
+.swatch { width:24; height:24; margin: 4 12 4 12; display: block; border: thin solid white }
+.swatch:first-child    { margin: 0 12 4 12; }
+
+.swatch-horizontal { display: inline-block; margin: 12 4 12 4 }
+.swatch-horizontal:first-child    { margin: 12 4 12 4; }
+#bottombar .swatches { height: 0; display: inline } 
+
+#settings label { margin:6 12 0 12;width:72;color:silver;font-size:12;margin-bottom:0 }
+#settings input { margin:6 12 0 12;margin-top:3;width:72 }
+
+canvas { margin: 0; padding: 0 }
+
+div { color: silver }
+
+.tile.choose {
+    width:180px;
+    height:180px;
+    border:thin solid grey
+}
+
+.swatch .tile {
+    width:24;
+    height:24;
+    border: none;
+    padding: 0;
+}
+
+.swatch img { border: none; padding: 0; margin: 0 }
